@@ -1,0 +1,7 @@
+name: WorldMobAI
+version: '${project.version}'
+main: fr.jus2raisin.WorldMobAIPlugin
+commands:
+  worldmobai:
+    permission: "worldmobai.*"
+    permission-message: "§4[!] §cVous n'avez pas la permission nécessaire."
