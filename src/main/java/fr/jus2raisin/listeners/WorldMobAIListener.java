@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -25,10 +26,13 @@ public class WorldMobAIListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCreateWorld(WorldLoadEvent event) {
+        if (!this.worldMobAIPlugin.getWorldAIMap().containsKey(event.getWorld().getName())) this.worldMobAIPlugin.getWorldAIMap().put(event.getWorld().getName(), Boolean.TRUE);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntitySpawnEvent(EntitySpawnEvent event) {
-        Bukkit.broadcastMessage("Entity World: " + event.getEntity().getWorld().getName());
-        Bukkit.broadcastMessage("World Status: " + this.worldMobAIPlugin.getWorldAIMap().get(event.getEntity().getWorld().getName()));
-       // if (!this.worldMobAIPlugin.getWorldAIMap().get(event.getEntity().getWorld().getName())) noAI(event.getEntity());
+        if (!this.worldMobAIPlugin.getWorldAIMap().get(event.getEntity().getWorld().getName())) ((Monster) event.getEntity()).setTarget(null);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
