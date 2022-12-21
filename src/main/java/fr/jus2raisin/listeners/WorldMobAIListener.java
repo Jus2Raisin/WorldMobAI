@@ -15,14 +15,29 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class WorldMobAIListener implements Listener {
 
     WorldMobAIPlugin worldMobAIPlugin;
+    ArrayList<EntityType> listOfEntities;
 
     public WorldMobAIListener(WorldMobAIPlugin worldMobAIPlugin) {
+        this.listOfEntities = new ArrayList<>();
         this.worldMobAIPlugin = worldMobAIPlugin;
+
+        this.listOfEntities.add(EntityType.BLAZE);
+        this.listOfEntities.add(EntityType.ENDERMITE);
+        this.listOfEntities.add(EntityType.ENDERMAN);
+        this.listOfEntities.add(EntityType.ZOMBIE);
+        this.listOfEntities.add(EntityType.PIG_ZOMBIE);
+        this.listOfEntities.add(EntityType.CREEPER);
+        this.listOfEntities.add(EntityType.SKELETON);
+        this.listOfEntities.add(EntityType.SPIDER);
+        this.listOfEntities.add(EntityType.CAVE_SPIDER);
+        this.listOfEntities.add(EntityType.SLIME);
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -32,11 +47,15 @@ public class WorldMobAIListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntitySpawnEvent(EntitySpawnEvent event) {
+        if (!this.listOfEntities.contains(event.getEntity().getType())) return;
+
         if (!this.worldMobAIPlugin.getWorldAIMap().get(event.getEntity().getWorld().getName())) ((Monster) event.getEntity()).setTarget(null);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTarget(EntityTargetLivingEntityEvent event) {
+        if (!this.listOfEntities.contains(event.getEntity().getType())) return;
+
         if (!this.worldMobAIPlugin.getWorldAIMap().get(event.getEntity().getWorld().getName())) event.setCancelled(true);
     }
 
